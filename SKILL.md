@@ -84,6 +84,22 @@ OpenClaw по умолчанию поддерживает провайдер `gr
 
 После перезапуска в логах должно быть что-то вроде `[gateway] agent model: groq/qwen/qwen3-32b` (если default — Qwen) или модель по умолчанию; при этом в списке моделей должен быть `qwen`.
 
+### 5a. Ошибка 400 «reasoning_effort must be one of none or default» (thinking default)
+
+Groq для Qwen 3 32B принимает только **none** или **default**. pi-ai шлёт значения вроде "medium"/"high" → 400.
+
+**Действие:** В каталоге установки OpenClaw (source) в файле  
+`node_modules/@mariozechner/pi-ai/dist/providers/openai-completions.js`  
+найти:
+```js
+params.reasoning_effort = options.reasoningEffort;
+```
+заменить на:
+```js
+params.reasoning_effort = (model.baseUrl && model.baseUrl.includes("groq.com")) ? "default" : options.reasoningEffort;
+```
+Перезапустить gateway. На другой машине можно использовать скрипт из репо chip-qwen-claw: `apply_groq_reasoning_patch.py <путь к openai-completions.js>`.
+
 ### 6. Проверка
 
 - В чате с ботом: отправить **`/model list`** и убедиться, что в списке есть модель с алиасом **qwen** (или `groq/qwen/qwen3-32b`).

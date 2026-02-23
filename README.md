@@ -70,6 +70,23 @@ wsl -e bash -c "systemctl --user restart openclaw-gateway"
 - Переключиться: **`/qwen`** или **`/model qwen`**.
 - Отправить сообщение и убедиться, что ответ идёт от выбранной модели.
 
+## Если 400 «reasoning_effort must be one of none or default»
+
+Groq API для Qwen 3 32B принимает только **`none`** или **`default`**. Клиент (pi-ai в OpenClaw) по умолчанию может слать значения вроде `medium`/`high` → 400.
+
+**Что сделать:** в установке OpenClaw (source) в файле  
+`node_modules/@mariozechner/pi-ai/dist/providers/openai-completions.js`  
+найти строку:
+```js
+params.reasoning_effort = options.reasoningEffort;
+```
+и заменить на:
+```js
+params.reasoning_effort = (model.baseUrl && model.baseUrl.includes("groq.com")) ? "default" : options.reasoningEffort;
+```
+Так для Groq всегда уходит `reasoning_effort: "default"` (thinking включён). После правки перезапустить gateway. На другой машине можно применить правку скриптом из этого репо:  
+`python3 apply_groq_reasoning_patch.py /path/to/node_modules/@mariozechner/pi-ai/dist/providers/openai-completions.js`
+
 ## (Опционально) Qwen по умолчанию
 
 Чтобы по умолчанию использовался Qwen:
