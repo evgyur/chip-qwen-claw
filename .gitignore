@@ -1,0 +1,7 @@
+# No secrets
+.env
+*.key
+*.pem
+# OS
+.DS_Store
+Thumbs.db
