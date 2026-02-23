@@ -21,8 +21,10 @@
 В `~/.openclaw/openclaw.json` в секции `agents.defaults.models` добавить (или дописать к существующим):
 
 ```json
-"groq/qwen3-32b": { "alias": "qwen" }
+"groq/qwen/qwen3-32b": { "alias": "qwen" }
 ```
+
+**Важно:** Groq API ожидает id модели `qwen/qwen3-32b`, поэтому в OpenClaw ссылка должна быть именно `groq/qwen/qwen3-32b` (не `groq/qwen3-32b`), иначе будет 404.
 
 Пример полной структуры:
 
@@ -31,7 +33,7 @@
   "agents": {
     "defaults": {
       "models": {
-        "groq/qwen3-32b": { "alias": "qwen" }
+        "groq/qwen/qwen3-32b": { "alias": "qwen" }
       }
     }
   }
@@ -75,7 +77,7 @@ wsl -e bash -c "systemctl --user restart openclaw-gateway"
 ```json
 "agents": {
   "defaults": {
-    "model": { "primary": "groq/qwen3-32b" }
+    "model": { "primary": "groq/qwen/qwen3-32b" }
   }
 }
 ```
@@ -107,7 +109,7 @@ wsl -e bash -c "systemctl --user restart openclaw-gateway"
 }
 ```
 
-И в `agents.defaults.models`: `"groq/qwen3-32b": { "alias": "qwen" }`.
+И в `agents.defaults.models`: `"groq/qwen/qwen3-32b": { "alias": "qwen" }`.
 
 ## Для Cursor / агентов
 
